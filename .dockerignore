@@ -1,0 +1,12 @@
+.env
+data/
+.git/
+.venv/
+venv/
+.superpowers/
+tests/
+docs/
+scripts/
+**/__pycache__/
+*.pyc
+*.log

@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#131316">
+<title>Streak Panel</title>
+<link rel="icon" type="image/png" href="/static/logo.png">
+<link rel="apple-touch-icon" href="/static/logo.png">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-plus" viewBox="0 0 16 16"><path d="M7.75 2a.75.75 0 0 1 .75.75V7h4.25a.75.75 0 0 1 0 1.5H8.5v4.25a.75.75 0 0 1-1.5 0V8.5H2.75a.75.75 0 0 1 0-1.5H7V2.75A.75.75 0 0 1 7.75 2Z"/></symbol>
+    <symbol id="i-x" viewBox="0 0 16 16"><path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.75.75 0 1 1 1.06 1.06L9.06 8l3.22 3.22a.75.75 0 1 1-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 0 1-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"/></symbol>
+  </defs>
+</svg>
+<div id="app">
+
+  <section id="login-view" class="login" hidden>
+    <form id="login-form" class="login-box">
+      <img src="/static/logo.png" alt="" width="52" height="52">
+      <h1>Streak Panel</h1>
+      <p class="sub">Sign in to manage your bots.</p>
+      <label for="login-password">Password</label>
+      <input id="login-password" type="password" autocomplete="current-password" required autofocus>
+      <p class="form-error" id="login-error" role="alert"></p>
+      <button type="submit" class="btn primary block">Sign in</button>
+    </form>
+  </section>
+
+  <section id="main-view" hidden>
+    <div class="layout">
+      <nav class="sidebar" aria-label="Bots">
+        <div class="sidebar-head">
+          <span class="brand"><img src="/static/logo.png" alt="" width="26" height="26">Streak Panel</span>
+          <button id="add-bot" class="btn primary sm" data-action="add-bot"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg>New</button>
+        </div>
+        <p class="summary" id="board-summary"></p>
+        <ul id="bot-list" class="bot-list"></ul>
+        <div id="empty-list" class="empty" hidden>
+          <p><strong>No bots yet</strong>A bot is one TikTok account that sends your daily message.</p>
+          <button class="btn primary" data-action="add-bot">Add your first bot</button>
+        </div>
+        <div class="sidebar-foot">
+          <span id="live" class="live" title="Live updates">Offline</span>
+          <button id="logout" class="btn ghost sm">Sign out</button>
+        </div>
+      </nav>
+
+      <main id="panel" class="panel-wrap"></main>
+    </div>
+  </section>
+
+  <dialog id="login-dialog">
+    <form method="dialog" id="cookie-form">
+      <h2 id="cookie-title">Add bot</h2>
+      <p class="lead" id="cookie-hint">Paste the <code>sessionid</code> cookie of the TikTok account this bot should send from.</p>
+      <details class="howto">
+        <summary>Where do I find it?</summary>
+        <ol>
+          <li>Log in to tiktok.com in a desktop browser.</li>
+          <li>Open developer tools (F12) → Application (Chrome) or Storage (Firefox) → Cookies → https://www.tiktok.com.</li>
+          <li>Copy the value of <code>sessionid</code>. Pasting the whole cookie line also works.</li>
+        </ol>
+        <p>Don't log out of TikTok in that browser afterwards. Logging out kills the cookie.</p>
+      </details>
+      <label for="cookie-sessionid">sessionid</label>
+      <textarea id="cookie-sessionid" rows="3" spellcheck="false" autocomplete="off" required></textarea>
+      <div id="region-row" hidden>
+        <label for="cookie-region">tt-target-idc</label>
+        <input id="cookie-region" spellcheck="false" autocomplete="off" placeholder="e.g. alisg">
+        <p class="hint">Copy the <code>tt-target-idc</code> cookie from the same browser.</p>
+      </div>
+      <p class="form-error" id="cookie-error" role="alert"></p>
+      <div class="dialog-actions">
+        <button value="cancel" formnovalidate class="btn ghost">Cancel</button>
+        <button id="cookie-submit" class="btn primary" value="default">Log in</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="test-dialog">
+    <form method="dialog" id="test-form">
+      <h2>Test send</h2>
+      <p class="lead">Sends one message right away. It doesn't count as today's streak send.</p>
+      <label for="test-username">Send to</label>
+      <input id="test-username" list="test-usernames" spellcheck="false" autocomplete="off" required placeholder="@username">
+      <datalist id="test-usernames"></datalist>
+      <label for="test-message">Message</label>
+      <input id="test-message" value="test" maxlength="200" required>
+      <p class="form-error" id="test-error" role="alert"></p>
+      <p class="form-ok" id="test-ok" role="status"></p>
+      <div class="dialog-actions">
+        <button value="cancel" formnovalidate class="btn ghost">Close</button>
+        <button id="test-submit" class="btn primary" value="default">Send test</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" hidden></div>
+</div>
+<script src="/static/app.js"></script>
+</body>
+</html>
